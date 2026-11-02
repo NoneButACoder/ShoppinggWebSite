@@ -30,6 +30,12 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
 
+  <!-- Promo Announcement Bar -->
+  <div class="bg-gradient-to-r from-brand-600 to-indigo-600 text-white py-2 px-4 text-center text-xs font-medium flex items-center justify-center gap-2">
+    <i data-lucide="tag" class="w-3.5 h-3.5"></i>
+    <span>Launch Special: Use code <strong class="underline decoration-indigo-200 font-mono tracking-wide">SHIPHYPE20</strong> at checkout for 20% off all orders!</span>
+  </div>
+
   <!-- Notification Toast -->
   <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
     <div class="bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center space-x-3 border border-slate-800">
@@ -165,10 +171,36 @@
 
       <!-- Drawer Footer: Summary & Checkout -->
       <div class="p-5 border-t border-slate-200 bg-slate-50 space-y-4">
+        <!-- Promo Code Input -->
+        <div class="space-y-2">
+          <div class="flex items-center space-x-2">
+            <input
+              type="text"
+              id="coupon-input"
+              placeholder="Promo code (e.g. SHIPHYPE20)"
+              class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 uppercase font-mono placeholder:normal-case placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-500"
+            />
+            <button
+              id="apply-coupon-btn"
+              class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+            >
+              Apply
+            </button>
+          </div>
+          <div id="coupon-tag" class="hidden flex items-center justify-between bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-medium border border-emerald-200">
+            <span id="coupon-name">SHIPHYPE20 (-20%)</span>
+            <button onclick="removeCoupon()" class="text-emerald-500 hover:text-emerald-800 font-bold ml-2">✕</button>
+          </div>
+        </div>
+
         <div class="space-y-1.5 text-sm">
           <div class="flex justify-between text-slate-500">
             <span>Subtotal</span>
             <span id="cart-subtotal">$0.00</span>
+          </div>
+          <div id="discount-row" class="hidden flex justify-between text-emerald-600 font-medium">
+            <span>Promo Discount</span>
+            <span id="cart-discount">-$0.00</span>
           </div>
           <div class="flex justify-between text-slate-500">
             <span>Standard Shipping</span>

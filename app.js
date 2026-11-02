@@ -104,6 +104,13 @@ let searchQuery = "";
 let currentSort = "popular";
 let cart = JSON.parse(localStorage.getItem("trendvault_cart") || "[]");
 
+// Coupon System
+const VALID_COUPONS = {
+  "SHIPHYPE20": { rate: 0.20, label: "SHIPHYPE20 (-20% OFF)" },
+  "WELCOME10": { rate: 0.10, label: "WELCOME10 (-10% OFF)" },
+};
+let appliedCoupon = null;
+
 // DOM Elements
 const productGrid = document.getElementById("product-grid");
 const emptyState = document.getElementById("empty-state");
@@ -280,8 +287,26 @@ function updateCartUI() {
 
   cartBadge.textContent = totalItems;
   drawerItemCount.textContent = `${totalItems} items`;
+
+  // Calculate discount
+  let discountAmount = 0;
+  const discountRow = document.getElementById("discount-row");
+  const couponTag = document.getElementById("coupon-tag");
+
+  if (appliedCoupon && subtotal > 0) {
+    discountAmount = subtotal * appliedCoupon.rate;
+    discountRow.classList.remove("hidden");
+    document.getElementById("cart-discount").textContent = `-$${discountAmount.toFixed(2)}`;
+    couponTag.classList.remove("hidden");
+    document.getElementById("coupon-name").textContent = appliedCoupon.label;
+  } else {
+    discountRow.classList.add("hidden");
+    couponTag.classList.add("hidden");
+  }
+
+  const finalTotal = Math.max(0, subtotal - discountAmount);
   cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
-  cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+  cartTotal.textContent = `$${finalTotal.toFixed(2)}`;
 
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = `
@@ -377,3 +402,38 @@ function showToast(msg) {
     toast.classList.add("translate-y-20", "opacity-0");
   }, 2200);
 }
+
+// Coupon Handlers
+const couponInput = document.getElementById("coupon-input");
+const applyCouponBtn = document.getElementById("apply-coupon-btn");
+
+if (applyCouponBtn) {
+  applyCouponBtn.addEventListener("click", () => {
+    const code = couponInput.value.trim().toUpperCase();
+    if (!code) {
+      showToast("Please enter a valid coupon code");
+      return;
+    }
+    if (VALID_COUPONS[code]) {
+      appliedCoupon = VALID_COUPONS[code];
+      couponInput.value = "";
+      updateCartUI();
+      showToast(`Success! ${appliedCoupon.label} applied.`);
+    } else {
+      showToast("Invalid coupon code. Try SHIPHYPE20");
+    }
+  });
+
+  couponInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      applyCouponBtn.click();
+    }
+  });
+}
+
+function removeCoupon() {
+  appliedCoupon = null;
+  updateCartUI();
+  showToast("Coupon removed");
+}
+
