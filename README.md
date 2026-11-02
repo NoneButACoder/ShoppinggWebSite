@@ -18,6 +18,7 @@ A modern, responsive e-commerce web application for lifestyle, tech gadgets, and
 - **Interactive Slide-over Cart**:
   - Live item quantity counter & badge
   - Real-time subtotal & total calculation
+  - **Promo Code System**: Apply `SHIPHYPE20` for 20% off or `WELCOME10` for 10% off
   - Persistent state powered by `localStorage`
 - **Simulated Checkout Flow**: Complete purchase modal with generated order tracking ID.
 - **Toast Notifications**: Interactive feedback on every user action.
